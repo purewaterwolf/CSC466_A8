@@ -29,7 +29,7 @@ PRINTLN         {return tprintln;}      // might be useless
 set             {return tset;}          // used to help assign i.e "set x to 3 * y"
 to              {return tto;}           // used to help assign i.e "set x to 3 * y"
 "="             {return tassign;}       // used to help assign i.e "g = "hello world""
-vari            {return tnum;}                  // will help declaration in yacc
+vari            {return tint;}                  // will help declaration in yacc
 vars            {return tstring;}               // will help declaration in yacc
 
 
