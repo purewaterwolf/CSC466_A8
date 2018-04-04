@@ -21,6 +21,7 @@ void yyerror( char *s );
 %token    tprinti
 %token    tprintsh
 %token    tprintsv
+%token    tprintln
 %token    tset
 %token    tto
 %token    tassign
@@ -31,7 +32,6 @@ void yyerror( char *s );
 %token    tnum
 
 %%
-
 
 program
    :  input     {
@@ -45,7 +45,6 @@ program
                   printf("//------------------\n");
                 }
    ;
-
 input
     :  /* empty */
     |  input line
@@ -64,50 +63,53 @@ line
     ;
 
 cmd
-    :  tint tid					// vari
+  :  tassign  {printf("assign\n");}
+  |  tint tid                                   // vari
        {
            strcpy( $$.str, "int " );
            strcat( $$.str, $2.str );
            strcat( $$.str, ";\n" );
-       } 
-    |  tstring tid				// vars
+       }
+    |  tstring tid                              // vars
        {
            strcpy( $$.str, "char " );
            strcat( $$.str, $2.str );
            strcat( $$.str, "[500];\n" );
        }
-    |  tprinti tid				// printi
+    |  tprinti tid                              // printi
        {
-           strcpy( $$.str, "printf("%d\n", " );
+           strcpy( $$.str, "printf(\"%d\\n\",");
            strcat( $$.str, $2.str );
-           strcat( $$.str, ");\n" );
-       } 
-    |  tprinti tnum				// printi
+           strcat( $$.str, ");\\n" );
+       }
+    |  tprinti tnum                             // printi
        {
-           strcpy( $$.str, "printf("" );
-           strcat( $$.str, $2.str );		// working under the assumption that for an explicit "5", tnum.str contains "5"
-           strcat( $$.str, "\n");\n" );
-       } 
-    |  tprintsh tid				// printsh
+           strcpy( $$.str, "printf("" );");
+           strcat( $$.str, $2.str );            // working under the assumption that for an explicit "5", tnum.str contains "5"
+           strcat( $$.str, "\n;");
+       }
+    |  tprintsh tid                             // printsh
        {
-           strcpy( $$.str, "printf("%s\n", " );
+           strcpy( $$.str, "printf(\"%s\\n\", " );
            strcat( $$.str, $2.str );
-           strcat( $$.str, ");\n" );
-       } 
-    |  tprintsv tid				// printsv
+           strcat( $$.str, ");\\n;" );
+       }
+    |  tprintsv tid                             // printsv
        {
            strcpy( $$.str, "int i = 0;\n" ); // declare i here or at the top of the program
            strcat( $$.str, "while(" );
            strcat( $$.str, $2.str );
            strcat( $$.str, "[i] != '\0')\n" );
            strcat( $$.str, "{\n" );
-           strcat( $$.str, "\tprintf("%c\n", " ); // \t should be a tab, or replace with 4 spaces
+           strcat( $$.str, "tprintf(\"%c\\n\", " ); // \t should be a tab, or replace with 4 spaces
            strcat( $$.str, $2.str );
            strcat( $$.str, "[i]);\n" );
            strcat( $$.str, "\ti++;\n" );
            strcat( $$.str, "}\n" );
-       } 
+       }
     ;
+
+ ;
 
 %%
 
