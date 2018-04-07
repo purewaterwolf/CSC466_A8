@@ -103,42 +103,101 @@ command
     ;
 declaration
     : tint variable                            
-        {
-        strcpy( $$.str, "int " );
-        strcat( $$.str, $2.str );
-        strcat( $$.str, ";\n" );
-        }
+	{
+		if(intab($2.str))
+		{
+		strcpy( $$.str, "printf(\"Variable ");
+		strcat( $$.str, $2.str);
+		strcat( $$.str, " has already been declared.\" ");
+		strcat( $$.str, ");\n" );
+		yyerror( $$.str);
+	        }
+		else
+		{
+        	strcpy( $$.str, "int " );
+	        strcat( $$.str, $2.str );
+        	strcat( $$.str, ";\n" );
+		addtab($2.str, $$.ttype);
+		
+	        }
+	}
     | tstring variable                             
-        {
-        strcpy( $$.str, "char " );
-        strcat( $$.str, $2.str );
-        strcat( $$.str, "[500];\n" );
-        }
+	{
+		if(intab($2.str))
+		{
+		strcpy( $$.str, "printf(\"Variable ");
+		strcat( $$.str, $2.str);
+		strcat( $$.str, " has already been declared.\" ");
+		strcat( $$.str, ");\n" );
+		yyerror( $$.str);
+		}
+	        else
+		{
+	        strcpy( $$.str, "char " );
+        	strcat( $$.str, $2.str );
+	        strcat( $$.str, "[500];\n" );
+        	}
+	}
     | variable '=' subexp
         {
-        if ( $3.ttype == 10 )
-                {
-                strcpy( $$.str, $1.str );
-                strcat( $$.str, " = " );
-                strcat( $$.str, $3.str );
-                strcat( $$.str, ";\n" );
-                }
-        if ( $3.ttype == 20 )
-                {
-                strcpy( $$.str, "strcpy(");
-                strcat( $$.str, $1.str );
-                strcat( $$.str, ", ");
-                strcat( $$.str, $3.str );
-                strcat( $$.str, ");\n" );
-                }
-        }
+		if(intab($1.str))
+		{
+	        	if ( $3.ttype == 10 )
+                	{
+	        	strcpy( $$.str, $1.str );
+        	        strcat( $$.str, " = " );
+                	strcat( $$.str, $3.str );
+	                strcat( $$.str, ";\n" );
+        	        }
+		        if ( $3.ttype == 20 )
+                	{
+	                strcpy( $$.str, "strcpy(");
+        	        strcat( $$.str, $1.str );
+                	strcat( $$.str, ", ");
+	                strcat( $$.str, $3.str );
+        	        strcat( $$.str, ");\n" );
+                	}
+	        }
+		else
+		{
+	                if ( $3.ttype == 10 )
+        	        {
+			strcpy( $$.str, "int ");
+	                strcat( $$.str, $1.str );
+                	strcat( $$.str, " = " );
+ 	                strcat( $$.str, $3.str );
+        	        strcat( $$.str, ";\n" );
+                	}
+	                if ( $3.ttype == 20 )
+        	        {
+                	strcpy( $$.str, "strcpy(");
+	                strcat( $$.str, $1.str );
+        	        strcat( $$.str, ", ");
+                	strcat( $$.str, $3.str );
+	                strcat( $$.str, ");\n" );
+        	        }
+
+		}
+	}
     | op variable op subexp
-        {
-        strcpy( $$.str, $2.str );
-        strcat( $$.str, " = " );
-        strcat( $$.str, $4.str );
-        strcat( $$.str, ";\n" );
-        }
+	{
+		if(intab($2.str))	
+	        {
+        	strcpy( $$.str, $2.str );
+        	strcat( $$.str, " = " );
+	        strcat( $$.str, $4.str );
+        	strcat( $$.str, ";\n" );
+	        }
+		else
+		{
+		strcpy( $$.str, "int ");
+		strcat( $$.str, $2.str);
+		strcat( $$.str, " = " );
+		strcat( $$.str, $4.str);
+		strcat( $$.str, ";\n" );
+		addtab( $2.str, $$.ttype);
+		}
+	}
     ;
 subexp
     : variable
