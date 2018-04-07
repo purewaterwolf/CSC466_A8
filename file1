@@ -1,0 +1,9 @@
+vari x
+vari y
+vars g
+y = 11 + f / 3 * q
+set x to 3 * y + 5 / 2 * w - 17 * b
+printi x
+g = "hello world"
+printsh g
+printsv g
