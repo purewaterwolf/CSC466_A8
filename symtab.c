@@ -10,11 +10,11 @@ entry symtab[100];
 int nsym;
 
 
-void addtab( char *s)
+void addtab( char *s, int i)
 {
  nsym++;
  strcpy( symtab[nsym].sname, s);
- symtab[nsym].stype = -1;
+ symtab[nsym].stype = i;
 }
 
 void showtab()

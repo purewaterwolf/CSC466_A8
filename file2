@@ -2,9 +2,12 @@ vari x
 vari y
 vars g
 vari f
-vari q
+vari r
+vari x
 y = 11 + f / 3 * q
 set x to 15 * 3 + x
+set z to 10
+vars g
 printi x
 g = "hello world"
 printsh g
