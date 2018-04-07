@@ -136,6 +136,7 @@ declaration
 	        strcpy( $$.str, "char " );
         	strcat( $$.str, $2.str );
 	        strcat( $$.str, "[500];\n" );
+		addtab ($2.str, 20);
         	}
 	}
     | variable '=' subexp
@@ -175,6 +176,7 @@ declaration
         	        strcat( $$.str, ", ");
                 	strcat( $$.str, $3.str );
 	                strcat( $$.str, ");\n" );
+			addtab( $1.str, 20);
         	        }
 
 		}
